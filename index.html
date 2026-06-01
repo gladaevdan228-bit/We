@@ -114,7 +114,7 @@
 			function checkPassword() {
 				const input = document.getElementById('password-input').value;
 
-				iif (input === String.fromCharCode(109,101,110,99,105,110,116,97,105)) {
+				if (input === String.fromCharCode(109,101,110,99,105,110,116,97,105)) {
 					document.getElementById("auth-screen").style.display = "none";
 					document.getElementById("main-content").style.display = "block"
 					startTimer();
