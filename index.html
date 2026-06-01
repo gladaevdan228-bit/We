@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>  LOVE </title>
+			<style>
+				body{
+					font-family:  Arial, sans-serif;
+					background-color: #fff0f3;
+					text-align: center;
+					padding: 50px 20px;
+					margin: 0;
+				}
+
+				.box {
+					background: white;
+					padding: 30px;
+					border-radius: 15px;
+					box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+					display: inline-block;
+					max-width: 400px;
+					width: 100%;
+					box-sizing: border-box;
+				}
+
+				input {
+					padding: 12px;
+					font-size: 35px;
+					border: 2px solid #ffb3c1;
+					border-radius: 8px;
+					margin-bottom: 25px;
+					width: 85%;
+					outline: none;
+					text-align: center;
+				}
+
+				button {
+					padding:  20px 25px;
+					font-size: 25px;
+					background-color: #ff3d6d;
+					color: whitesmoke;
+					border: none;
+					border-radius: 8px;
+					cursor: pointer;
+					font-weight: bold;
+					width: 50%;
+				}
+
+				button:hover {
+					background-color: #ff758f; /* Цвет кнопки при наведении */
+				}
+
+				/* Изначально полностью прячем секретный контент */
+        		#main-content 	{
+            				display: none; 
+        		}
+
+
+        	.timer-number {
+        		font-size:42px;
+        		font-weight: bold;
+        		color: #ff4d6d;
+        		margin: 15px 0;
+        	}
+
+        	ul {
+        		text-align: left;
+        		font-size: 20px;
+        		line-height: 1.6;
+        	}
+
+			.Love_cuz {
+				font-size: 35px;
+				font-weight: bold;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="auth-screen" class="box">
+				<h1>Only for you<3 </h1>
+				<p>Write our password :</p>
+				<input type="password" id="password-input" placeholder="password:" >
+				<br>
+				<button onclick = "checkPassword()">To enter</button>
+				<p id="error-message" style="color: red; display: none; font-weight: bold; margin-top: 15px;">
+						You made wrong cinta, try again. Love you:)
+				</p>
+		</div>
+
+		<div id="main-content" class="box">
+			<h1>
+			<strong>I love you. And happy to say it &#128513; </strong> <br/>
+			</h1>
+				<p class="Love_cuz">
+					<a href="Why.html" target="_blank">Why i m love you ?</a>
+				</p>
+				<h2>
+						<a href="Ourphoto.html" target="_blank">We in real</a>
+				</h2>
+
+				<div style="margin: 25px 0;">
+					<h3> Until i'm back:</h3>
+					<div id="timer" class="timer-number">counting down the time</div>
+				</div>
+			
+		</div>
+
+<!-- 3. ЛОГИКА JAVASCRIPT -->
+
+		<script>
+			function checkPassword() {
+				const input = document.getElementById('password-input').value;
+
+				if (input === "mencintai" ) {
+					document.getElementById("auth-screen").style.display = "none";
+					document.getElementById("main-content").style.display = "block"
+					startTimer();
+				}	else {
+					document.getElementById("error-message").style.display = "block"
+				}
+			}
+
+			 // Функция тикающего таймера
+
+			function startTimer(){
+				const targetDate = new Date(2027, 5, 30, 0, 0, 0 ).getTime();
+
+				setInterval(function() {
+					const now = new Date().getTime() //now time
+					const diff = targetDate - now // late time
+
+					// Переводим миллисекунды в дни, часы, минуты и секунды
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                if (diff > 0) {
+                	document.getElementById("timer").innerHTML = days + "d" + hours + "h" + minutes + "m" + seconds + "s" ;  
+                } else {// Если время вышло
+                		document.getElementById("timer").innerHTML = " I m backkk ❤️" ;
+                }
+				
+			}, 1000); // Повторять код каждую 1000 миллисекунд (1 секунду)
+		}
+		</script>
+
+
+		
+</body>
+</html>
