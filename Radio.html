@@ -1,172 +1,818 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Radio Station Player</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; margin: 0; }
-        .container { max-width: 600px; margin: 0 auto; padding-bottom: 100px; }
-        h2 { text-align: center; color: #38bdf8; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 25px; }
-        
-        /* Search Box */
-        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-box input { flex: 1; padding: 12px; border: 1px solid #334155; background: #1e293b; color: #fff; border-radius: 8px; font-size: 16px; outline: none; }
-        .search-box input:focus { border-color: #38bdf8; }
-        .search-box button { padding: 12px 24px; border: none; background: #38bdf8; color: #0f172a; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .search-box button:hover { background: #7dd3fc; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Playlist Music Player</title>
 
-        /* Quick Selection Tabs */
-        .tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px; }
-        .tab-btn { padding: 8px 14px; border: none; background: #1e293b; color: #94a3b8; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
-        .tab-btn:hover { background: #334155; color: #fff; }
-        .tab-btn.active { background: #38bdf8; color: #0f172a; }
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-        /* Station List */
-        .station-list { display: flex; flex-direction: column; gap: 12px; }
-        .station-card { display: flex; align-items: center; justify-content: space-between; background: #1e293b; padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; border: 1px solid #334155; }
-        .station-card:hover { background: #334155; border-color: #38bdf8; transform: translateY(-2px); }
-        .station-info { flex: 1; min-width: 0; }
-        .station-name { font-weight: bold; font-size: 16px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .station-tags { color: #94a3b8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .play-icon { color: #38bdf8; font-size: 20px; padding-left: 10px; }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        /* Bottom Fixed Player Bar */
-        .player-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 2px solid #38bdf8; padding: 15px; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 8px; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
-        .now-playing { font-size: 14px; color: #38bdf8; font-weight: bold; text-align: center; }
-        audio { width: 100%; max-width: 400px; }
-    </style>
+body{
+    background:#0f172a;
+    color:#f8fafc;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+    padding:20px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    padding-bottom:140px;
+}
+
+h1{
+    text-align:center;
+    color:#38bdf8;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+.panel{
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:20px;
+}
+
+.playlist-create{
+    display:flex;
+    gap:10px;
+}
+
+.playlist-create input{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#0f172a;
+    color:white;
+}
+
+.playlist-create button{
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    background:#38bdf8;
+    color:#0f172a;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.playlists{
+    margin-top:15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.playlist{
+    background:#334155;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.playlist.active{
+    background:#38bdf8;
+    color:#0f172a;
+}
+
+.delete-playlist{
+    margin-left:6px;
+    color:#ef4444;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.upload-zone{
+    background:#1e293b;
+    border:2px dashed #334155;
+    border-radius:12px;
+    padding:30px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload-zone:hover{
+    border-color:#38bdf8;
+}
+
+#fileInput{
+    display:none;
+}
+
+.track-list{
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.track{
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:10px;
+    padding:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+}
+
+.track:hover{
+    border-color:#38bdf8;
+}
+
+.track.active{
+    border-color:#38bdf8;
+    box-shadow:0 0 10px rgba(56,189,248,.3);
+}
+
+.track-name{
+    flex:1;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.track-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-size:18px;
+}
+
+.player{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#1e293b;
+    border-top:2px solid #38bdf8;
+    padding:15px;
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    z-index:999;
+}
+
+.now-playing{
+    text-align:center;
+    color:#38bdf8;
+    font-weight:bold;
+}
+
+.controls{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.controls button{
+    padding:8px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#38bdf8;
+    color:#0f172a;
+    font-weight:bold;
+}
+
+audio{
+    width:100%;
+}
+
+.track,
+.playlist,
+.controls button,
+.upload-zone{
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+.upload-zone{
+    min-height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.player{
+    border-radius:20px 20px 0 0;
+    padding-bottom:calc(15px + env(safe-area-inset-bottom));
+}
+
+.controls button{
+    min-width:56px;
+    min-height:56px;
+    border-radius:14px;
+    font-size:20px;
+}
+
+@media (max-width:600px){
+
+    body{
+        padding:12px;
+    }
+
+    .container{
+        max-width:100%;
+        padding-bottom:170px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    .subtitle{
+        font-size:13px;
+    }
+
+    .playlist-create{
+        flex-direction:column;
+    }
+
+    .playlist-create input,
+    .playlist-create button{
+        width:100%;
+    }
+
+    .track{
+        padding:14px;
+    }
+
+    .track-name{
+        font-size:16px;
+    }
+
+    .player{
+        padding:12px;
+    }
+
+    audio{
+        width:100%;
+    }
+}
+
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Global Radio Player</h2>
-        <div class="subtitle">Search any country (e.g., Indonesia, Brazil) or music genre (e.g., Jazz, Anime)</div>
-        
-        <!-- SEARCH INPUT -->
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Type country or music style...">
-            <button onclick="searchRadio()">Search</button>
-        </div>
+<div class="container">
 
-        <!-- QUICK TABS -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="loadByCountry('JP', this)">🇯🇵 Japan</button>
-            <button class="tab-btn" onclick="loadByCountry('CN', this)">🇨🇳 China</button>
-            <button class="tab-btn" onclick="loadByCountry('KR', this)">🇰🇷 Korea</button>
-            <button class="tab-btn" onclick="loadByCountry('US', this)">🇺🇸 USA</button>
-            <button class="tab-btn" onclick="loadByCountry('FR', this)">🇫🇷 France</button>
-        </div>
+<h1>🎵 Smart Music Player</h1>
+<div class="subtitle">
+	Making playlists and enjoy
+</div>
 
-        <!-- STATIONS OUTPUT -->
-        <div class="station-list" id="stations">Loading stations...</div>
-    </div>
+<div class="panel">
 
-    <!-- PLAYER BAR -->
-    <div class="player-bar" id="playerBar">
-        <div class="now-playing" id="currentStationName">Now playing: </div>
-        <audio id="radioAudio" controls></audio>
-    </div>
+<div class="playlist-create">
+<input id="playlistName" placeholder="Name of track">
+<button onclick="createPlaylist()">Create</button>
+</div>
 
-    <script>
-        // Стабильный базовый хост API
-        const API_HOST = "https://radio-browser.info";
+<div class="playlists" id="playlists"></div>
 
-        // Запуск при старте страницы
-        window.onload = () => {
-            loadRadioData(`${API_HOST}bycountrycodeexact/JP?limit=15&order=clickcount&reverse=true`);
-        };
+</div>
 
-        function loadByCountry(code, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('searchInput').value = ''; 
-            
-            loadRadioData(`${API_HOST}bycountrycodeexact/${code}?limit=15&order=clickcount&reverse=true`);
-        }
+<div class="upload-zone" onclick="fileInput.click()">
+<p id="uploadText">
+🎵 Add music in playlist 🎵
+</p>
 
-        function searchRadio() {
-            const query = document.getElementById('searchInput').value.trim();
-            if (!query) return alert('Please enter a search term!');
+<input
+id="fileInput"
+type="file"
+accept="audio/*"
+multiple
+onchange="handleFiles(this.files)">
+</div>
 
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+<div class="track-list" id="trackList"></div>
 
-            const url = `${API_HOST}byname/${encodeURIComponent(query)}?limit=15&order=clickcount&reverse=true`;
-            loadRadioData(url);
-        }
+</div>
 
-        // Глобальная функция-колбэк, которую вызовет сервер базы данных
-        window.handleRadioResponse = function(stations) {
-            const listContainer = document.getElementById('stations');
-            listContainer.innerHTML = '';
+<div class="player" id="playerBar">
 
-            // Удаляем временный тег скрипта из документа, чтобы не засорять HTML
-            const oldScript = document.getElementById('jsonp-script');
-            if (oldScript) oldScript.remove();
+<div class="now-playing" id="currentTrack">
+Ничего не играет
+</div>
 
-            if (!stations || stations.length === 0) {
-                listContainer.innerHTML = 'No stations found. Try searching with different keywords (e.g., Indonesia, Rock).';
-                return;
+<div class="controls">
+<button onclick="playPrev()">⏮</button>
+<button onclick="playNext()">⏭</button>
+</div>
+
+<audio id="audio" controls></audio>
+
+</div>
+
+<script>
+
+let db;
+
+let playlists = [];
+let currentTracks = [];
+
+let activePlaylistId = null;
+let activeTrackId = null;
+
+const request = indexedDB.open("SmartPlayerDB",2);
+
+request.onupgradeneeded = e=>{
+
+    db = e.target.result;
+
+    if(!db.objectStoreNames.contains("playlists")){
+        db.createObjectStore(
+            "playlists",
+            {
+                keyPath:"id",
+                autoIncrement:true
             }
+        );
+    }
 
-            stations.forEach(station => {
-                if (!station.url_resolved) return;
+    if(!db.objectStoreNames.contains("tracks")){
+        db.createObjectStore(
+            "tracks",
+            {
+                keyPath:"id",
+                autoIncrement:true
+            }
+        );
+    }
+};
 
-                const card = document.createElement('div');
-                card.className = 'station-card';
-                card.onclick = () => playRadio(station.url_resolved, station.name);
+request.onsuccess = e=>{
+    db = e.target.result;
+    init();
+};
 
-                const tags = station.tags ? station.tags.split(',').slice(0, 4).join(', ') : 'radio';
-                const country = station.country ? ` (${station.country})` : '';
+async function init(){
 
-                card.innerHTML = `
-                    <div class="station-info">
-                        <div class="station-name">${station.name}${country}</div>
-                        <div class="station-tags">${tags}</div>
-                    </div>
-                    <div class="play-icon">▶</div>
-                `;
-                listContainer.appendChild(card);
-            });
+    await loadPlaylists();
+
+    if(playlists.length===0){
+
+        const tx=db.transaction(
+            ["playlists"],
+            "readwrite"
+        );
+
+        tx.objectStore("playlists")
+        .add({
+            name:"All Tracks",
+            system:true
+        });
+
+        tx.oncomplete=async()=>{
+            await loadPlaylists();
+            activePlaylistId=playlists[0].id;
+            loadTracks();
         };
 
-        // Функция отправки JSONP запроса
-        function loadRadioData(baseUrl) {
-            const listContainer = document.getElementById('stations');
-            listContainer.innerHTML = 'Searching stations...';
+    }else{
 
-            // Добавляем к URL параметр callback, сообщающий серверу имя нашей функции обработки
-            const jsonpUrl = baseUrl + (baseUrl.includes('?') ? '&' : '?') + 'callback=handleRadioResponse';
+        activePlaylistId=playlists[0].id;
+        loadTracks();
+    }
+}
 
-            // Создаем тег <script>, который браузер выполнит без ограничений CORS
-            const script = document.createElement('script');
-            script.src = jsonpUrl;
-            script.id = 'jsonp-script';
-            
-            // Если скрипт не загрузился вовсе (проблема с интернетом)
-            script.onerror = () => {
-                listContainer.innerHTML = 'Connection error. Please check your network or try again.';
+function loadPlaylists(){
+
+    return new Promise(resolve=>{
+
+        const tx=db.transaction(
+            ["playlists"],
+            "readonly"
+        );
+
+        const req=tx
+        .objectStore("playlists")
+        .getAll();
+
+        req.onsuccess=()=>{
+
+            playlists=req.result;
+            renderPlaylists();
+            resolve();
+        };
+    });
+}
+
+function renderPlaylists(){
+
+    const container=
+    document.getElementById("playlists");
+
+    container.innerHTML="";
+
+    playlists.forEach(pl=>{
+
+        const div=
+        document.createElement("div");
+
+        div.className=
+        "playlist"+
+        (pl.id===activePlaylistId
+        ?" active":"");
+
+        div.innerHTML=
+        pl.name;
+
+        div.onclick=()=>{
+            switchPlaylist(pl.id);
+        };
+
+        if(!pl.system){
+
+            const del=
+            document.createElement("span");
+
+            del.className=
+            "delete-playlist";
+
+            del.innerHTML="✖";
+
+            del.onclick=(e)=>{
+                e.stopPropagation();
+                deletePlaylist(pl.id);
             };
 
-            document.body.appendChild(script);
+            div.appendChild(del);
         }
 
-        function playRadio(streamUrl, stationName) {
-            const playerBar = document.getElementById('playerBar');
-            const audio = document.getElementById('radioAudio');
-            const title = document.getElementById('currentStationName');
+        container.appendChild(div);
+    });
 
-            title.innerText = `Now playing: ${stationName}`;
-            audio.src = streamUrl;
-            
-            playerBar.style.display = 'flex';
-            audio.play().catch(error => {
-                alert("This stream is temporary unavailable. Please try another station.");
-            });
+    const current=
+    playlists.find(
+        p=>p.id===activePlaylistId
+    );
+
+    if(current){
+
+        uploadText.innerText=
+        "🎵 Добавить музыку в ["+
+        current.name+
+        "]";
+    }
+}
+
+function createPlaylist(){
+
+    const name=
+    playlistName.value.trim();
+
+    if(!name)return;
+
+    const tx=
+    db.transaction(
+        ["playlists"],
+        "readwrite"
+    );
+
+    tx.objectStore("playlists")
+    .add({
+        name:name
+    });
+
+    tx.oncomplete=async()=>{
+
+        playlistName.value="";
+
+        await loadPlaylists();
+
+        const last=
+        playlists[playlists.length-1];
+
+        switchPlaylist(last.id);
+    };
+}
+
+function switchPlaylist(id){
+
+    activePlaylistId=id;
+
+    renderPlaylists();
+
+    loadTracks();
+}
+
+function deletePlaylist(id){
+
+    if(
+        !confirm(
+            "Delete playlist?"
+        )
+    ) return;
+
+    const tx=
+    db.transaction(
+        ["playlists","tracks"],
+        "readwrite"
+    );
+
+    tx.objectStore("playlists")
+    .delete(id);
+
+    const tracksStore=
+    tx.objectStore("tracks");
+
+    const req=
+    tracksStore.getAll();
+
+    req.onsuccess=()=>{
+
+        req.result.forEach(track=>{
+
+            if(
+                track.playlistId===id
+            ){
+                tracksStore.delete(
+                    track.id
+                );
+            }
+        });
+    };
+
+    tx.oncomplete=()=>{
+
+        activePlaylistId=
+        playlists[0]?.id||null;
+
+        init();
+    };
+}
+
+function handleFiles(files){
+
+    if(
+        !files.length||
+        !activePlaylistId
+    ) return;
+
+    const tx=
+    db.transaction(
+        ["tracks"],
+        "readwrite"
+    );
+
+    const store=
+    tx.objectStore("tracks");
+
+    [...files].forEach(file=>{
+
+        store.add({
+            playlistId:
+            activePlaylistId,
+            name:file.name,
+            fileBlob:file
+        });
+    });
+
+    tx.oncomplete=()=>{
+
+        fileInput.value="";
+        loadTracks();
+    };
+}
+
+function loadTracks(){
+
+    const tx=
+    db.transaction(
+        ["tracks"],
+        "readonly"
+    );
+
+    const req=
+    tx.objectStore("tracks")
+    .getAll();
+
+    req.onsuccess=()=>{
+
+        currentTracks=
+        req.result.filter(
+            t=>
+            t.playlistId===
+            activePlaylistId
+        );
+
+        renderTracks();
+    };
+}
+
+function renderTracks(){
+
+    trackList.innerHTML="";
+
+    if(
+        currentTracks.length===0
+    ){
+
+        trackList.innerHTML=
+        "<p style='text-align:center;color:#94a3b8'>still empty </p>";
+
+        return;
+    }
+
+    currentTracks.forEach(track=>{
+
+        const div=
+        document.createElement("div");
+
+        div.className=
+        "track"+
+        (track.id===activeTrackId
+        ?" active":"");
+
+        div.onclick=()=>{
+            playTrack(track);
+        };
+
+        div.innerHTML=`
+        <div class="track-name">
+        ${track.name.replace(/\.[^/.]+$/,"")}
+        </div>
+        <div class="track-actions">
+        <button
+        class="icon-btn"
+        onclick="event.stopPropagation();deleteTrack(${track.id})">
+        🗑
+        </button>
+        </div>
+        `;
+
+        trackList.appendChild(div);
+    });
+}
+
+function playTrack(track){
+
+    activeTrackId=
+    track.id;
+
+    renderTracks();
+
+    const audio=
+    document.getElementById("audio");
+
+    const title=
+    document.getElementById(
+        "currentTrack"
+    );
+
+    title.innerText=
+    "▶ "+
+    track.name.replace(
+        /\.[^/.]+$/,
+        ""
+    );
+
+    if(audio.src){
+        URL.revokeObjectURL(
+            audio.src
+        );
+    }
+
+    audio.src=
+    URL.createObjectURL(
+        track.fileBlob
+    );
+
+    playerBar.style.display=
+    "flex";
+
+    audio.play();
+
+    audio.onloadedmetadata = () => {
+    const pos =
+        Number(localStorage.getItem("lastPosition")) || 0;
+
+    if(pos < audio.duration){
+        audio.currentTime = pos;
+    }
+};
+
+audio.ontimeupdate = () => {
+    localStorage.setItem(
+        "lastPosition",
+        audio.currentTime
+    );
+};
+
+    audio.onended=()=>{
+        playNext();
+    };
+}
+
+function playNext(){
+
+    const index=
+    currentTracks.findIndex(
+        t=>
+        t.id===activeTrackId
+    );
+
+    if(
+        index!==-1 &&
+        index<
+        currentTracks.length-1
+    ){
+        playTrack(
+            currentTracks[
+                index+1
+            ]
+        );
+    }
+}
+
+function playPrev(){
+
+    const index=
+    currentTracks.findIndex(
+        t=>
+        t.id===activeTrackId
+    );
+
+    if(index>0){
+
+        playTrack(
+            currentTracks[
+                index-1
+            ]
+        );
+    }
+}
+
+function deleteTrack(id){
+
+    const tx=
+    db.transaction(
+        ["tracks"],
+        "readwrite"
+    );
+
+    tx.objectStore("tracks")
+    .delete(id);
+
+    tx.oncomplete=()=>{
+
+        if(
+            activeTrackId===id
+        ){
+
+            audio.pause();
+
+            audio.removeAttribute(
+                "src"
+            );
+
+            playerBar.style.display=
+            "none";
+
+            activeTrackId=null;
         }
-    </script>
+
+        loadTracks();
+    };
+}
+
+</script>
+
 </body>
 </html>
+
+
+
+
 
 
