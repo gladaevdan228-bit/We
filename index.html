@@ -22,6 +22,7 @@
 					max-width: 400px;
 					width: 100%;
 					box-sizing: border-box;
+
 				}
 
 				input {
@@ -116,7 +117,7 @@
 
 				if (input === String.fromCharCode(109,101,110,99,105,110,116,97,105)) {
 					document.getElementById("auth-screen").style.display = "none";
-					document.getElementById("main-content").style.display = "block"
+					document.getElementById("main-content").style.display = "inline-block"
 					startTimer();
 				}	else {
 					document.getElementById("error-message").style.display = "block"
