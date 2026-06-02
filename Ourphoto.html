@@ -10,7 +10,7 @@
 									margin: 0;
 								}
 								
-								1h   {
+								h1   {
 									color: #ff4d6d;
 									font-size: 45px;
 									margin-bottom: 25px;
@@ -61,7 +61,7 @@
 
 							photoNumbers.forEach(function (number){ const img = document.createElement('img');
 
-								img.scr = "photos/photo" + number + ".jpeg"
+								img.src = "photos/photo" + number + ".jpeg"
 								img.alt = "Our memory"
 								img.loading = "lazy"
 								galleryBlock.appendChild(img);
