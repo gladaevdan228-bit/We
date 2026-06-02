@@ -40,7 +40,35 @@
 				<h1>Our moment</h1>
 				<div id="photo-gallery" class="gallery"></div>
 
-				<script></script>
+				<script>
+							const galleryBlock = document.getElementById("photo-gallery");
+							let photoNumbers = [];
+
+							for (let i = 1; i <= 12; i++){
+								photoNumbers.push(i);
+							}
+
+							for (let i = 100; i <= 153; i++){
+								photoNumbers.push(i);
+							}
+
+							for (let i = photoNumbers.length - 1; i > 0; i --){
+								const j = Math.floor(Math.random() * (i + 1));
+								const temp = photoNumbers[i];
+								photoNumbers[i] = photoNumbers[j];
+								photoNumbers[j] = temp
+							}
+
+							photoNumbers.forEach(function (number){ const img = document.createElement('img');
+
+								img.scr = "photos/photo" + number + ".jpeg"
+								img.alt = "Our memory"
+								img.loading = "lazy"
+								galleryBlock.appendChild(img);
+								})
+
+
+				</script>
 	</body>
 
 
